@@ -4,10 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Acceso Denegado</title>
+    <title>Google Sig-in</title>
 </head>
 <body>
     
-    <h1>Acceso Denegado</h1>
+    <h1>Google Sig-in</h1>
+
+    <div id="g_id_onload"
+         data-client_id="823063034993-qjffafg8215fpbet93g5ssia8gikj10k.apps.googleusercontent.com"
+         data-auto_prompt="false"
+         data-callback="handleCredentialResponse">
+      </div>
+      <div class="g_id_signin"
+         data-type="standard"
+         data-size="large"
+         data-theme="outline"
+         data-text="sign_in_with"
+         data-shape="rectangular"
+         data-logo_alignment="left">
+      </div>
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script><br>
+
+    <button id="google_sing_out" >
+        sign-out
+    </button>
+    <script>
+        function handleCredentialResponse(response) {
+           
+            //google token - id token
+            //    console.log('Id-token', response.credential);
+
+            const body = {id_token: response.credential};
+
+            fetch('https://rest-server-curso-node-seccion.herokuapp.com/api/auth/google', {
+                method: 'POST',
+                headers: {
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify(body)
+            })
+            .then( resp => resp.json())
+            .then( resp => {
+                console.log(resp)
+                localStorage.setItem('correo', resp.usuario.correo);
+            })
+            .catch( console.warn);    
+        }
+
+        const boton = document.getElementById("google_sing_out");
+        boton.onclick = () =>{
+            google.accounts.id.disableAutoSelect();
+            google.accounts.id.revoke( localStorage.getItem('correo'), done =>{
+                localStorage.clear();
+                location.reload();
+            });
+        }
+      </script>
 </body>
 </html>

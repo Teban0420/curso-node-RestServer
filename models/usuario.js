@@ -23,7 +23,7 @@ const UsuarioSchema = Schema({ // el esquema es la estructura de la tabla
     rol:{
         type: String,  
         required: true,
-        emun: ['admin', 'user']    
+        emun: ['admin', 'user'],
     },
     estado:{
         type: Boolean, 
