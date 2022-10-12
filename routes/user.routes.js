@@ -35,7 +35,7 @@ router.get('/', usuariosGet);
 
   router.delete('/:id',[
     validarJWT,
-    // Admin_rol,
+     Admin_rol,
     rol('admin', 'ventas'),
     check('id', 'No es un id valido').isMongoId(),
     check('id').custom(Validar_id),
